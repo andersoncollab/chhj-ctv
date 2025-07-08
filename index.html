@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHHJ CTV Campaign Performance Dashboard</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for interactive charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to integrate brand fonts and colors */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+        }
+        .chhj-green { color: #006747; }
+        .chhj-orange { color: #F58220; }
+        .bg-chhj-green { background-color: #006747; }
+        .bg-chhj-orange { background-color: #F58220; }
+        .border-chhj-green { border-color: #006747; }
+        .border-chhj-orange { border-color: #F58220; }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="min-h-screen p-4 sm:p-6 lg:p-8">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- Header Section -->
+            <header class="pb-6 border-b border-gray-200">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <!-- Logo and Title -->
+                    <div class="flex items-center gap-4">
+                        <img src="https://www.collegehunkshaulingjunk.com/themes/custom/chhj/src/images/college-hunks-hauling-junk_logo.svg" alt="College Hunks Hauling Junk Logo" class="h-12 w-auto">
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">CTV Campaign Performance</h1>
+                            <p class="text-sm text-gray-500">National Campaign | Managed by Anderson Collaborative</p>
+                        </div>
+                    </div>
+                    <!-- Date Range -->
+                    <div class="text-right">
+                         <p class="text-sm font-medium text-gray-600">Reporting Period:</p>
+                         <p class="text-lg font-semibold chhj-green">Apr 1 - July 6</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Chart Section -->
+            <main class="mt-8">
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+                    <h2 class="text-xl font-bold mb-1 text-gray-800">ROAS Over Time by Campaign</h2>
+                    <p class="text-sm text-gray-500 mb-6">Visualizing Return on Ad Spend for Prospecting and Retargeting efforts across different franchise tiers.</p>
+                    <div class="w-full h-96 md:h-[500px]">
+                        <canvas id="roasChart"></canvas>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="text-center mt-8 text-sm text-gray-400">
+                <p>Generated for discussion purposes. Data as of July 6.</p>
+            </footer>
+
+        </div>
+    </div>
+
+    <script>
+        // --- Chart.js Configuration ---
+
+        // 1. Data from the spreadsheet
+        const campaignData = {
+            labels: ["May 6", "May 20", "June 6", "June 20", "July 6"],
+            datasets: [
+                {
+                    label: 'Retargeting - Tier 2',
+                    data: [11.53, 12.13, 13.09, 19.73, 20.33],
+                    borderColor: '#006747', // CHHJ Primary Green
+                    backgroundColor: '#006747',
+                    tension: 0.3,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7
+                },
+                {
+                    label: 'Retargeting - Tier 3',
+                    data: [11.4, 13.32, 12.69, 19.39, 19.87],
+                    borderColor: '#009E6E', // Lighter Green
+                    backgroundColor: '#009E6E',
+                    tension: 0.3,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7
+                },
+                {
+                    label: 'Retargeting - Tier 1',
+                    data: [10.91, 11.33, 13.34, 17.49, 17.36],
+                    borderColor: '#2a7e68', // Mid Green
+                    backgroundColor: '#2a7e68',
+                    tension: 0.3,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7
+                },
+                {
+                    label: 'Prospecting - Tier 1',
+                    data: [2.09, 3.11, 4.51, 6.16, 6.96],
+                    borderColor: '#F58220', // CHHJ Primary Orange
+                    backgroundColor: '#F58220',
+                    tension: 0.3,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7
+                },
+                {
+                    label: 'Prospecting - Tier 2',
+                    data: [2.14, 2.48, 3.25, 4.68, 6.32],
+                    borderColor: '#F9B473', // Lighter Orange
+                    backgroundColor: '#F9B473',
+                    tension: 0.3,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7
+                },
+                {
+                    label: 'Prospecting - Tier 3',
+                    data: [1.63, 1.9, 2.94, 4.04, 5.43],
+                    borderColor: '#f79b4a', // Mid Orange
+                    backgroundColor: '#f79b4a',
+                    tension: 0.3,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7
+                }
+            ]
+        };
+
+        // 2. Chart Configuration
+        const chartConfig = {
+            type: 'line',
+            data: campaignData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            font: {
+                                size: 12,
+                                family: 'Inter'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: '#111827', // Dark gray tooltip
+                        titleFont: { size: 14, weight: 'bold', family: 'Inter' },
+                        bodyFont: { size: 12, family: 'Inter' },
+                        padding: 12,
+                        cornerRadius: 8,
+                        displayColors: true,
+                        usePointStyle: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(2);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                           font: { size: 12, family: 'Inter' }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'ROAS (Return on Ad Spend)',
+                            font: { size: 14, weight: 'medium', family: 'Inter' }
+                        },
+                        grid: {
+                            color: '#e5e7eb' // Lighter grid lines
+                        },
+                        ticks: {
+                           font: { size: 12, family: 'Inter' }
+                        }
+                    }
+                }
+            }
+        };
+
+        // 3. Render the chart
+        const roasChart = new Chart(
+            document.getElementById('roasChart'),
+            chartConfig
+        );
+    </script>
+</body>
+</html>
