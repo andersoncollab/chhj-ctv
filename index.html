@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js for interactive charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js Annotation Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.2.1/dist/chartjs-plugin-annotation.min.js"></script>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,7 +47,7 @@
                     <!-- Date Range -->
                     <div class="text-right">
                          <p class="text-sm font-medium text-gray-600">Reporting Period:</p>
-                         <p class="text-lg font-semibold chhj-green">Apr 1 - July 6</p>
+                         <p class="text-lg font-semibold chhj-green">Apr 1 - July 20</p>
                     </div>
                 </div>
             </header>
@@ -63,7 +65,7 @@
 
             <!-- Footer -->
             <footer class="text-center mt-8 text-sm text-gray-400">
-                <p>Generated for discussion purposes. Data as of July 6.</p>
+                <p>Generated for discussion purposes. Data as of July 20.</p>
             </footer>
 
         </div>
@@ -74,11 +76,11 @@
 
         // 1. Data from the spreadsheet
         const campaignData = {
-            labels: ["May 6", "May 20", "June 6", "June 20", "July 6"],
+            labels: ["May 6", "May 20", "June 6", "June 20", "July 6", "July 20"],
             datasets: [
                 {
                     label: 'Retargeting - Tier 2',
-                    data: [11.53, 12.13, 13.09, 19.73, 20.33],
+                    data: [11.53, 12.13, 13.09, 19.73, 20.33, 14.28],
                     borderColor: '#006747', // CHHJ Primary Green
                     backgroundColor: '#006747',
                     tension: 0.3,
@@ -88,7 +90,7 @@
                 },
                 {
                     label: 'Retargeting - Tier 3',
-                    data: [11.4, 13.32, 12.69, 19.39, 19.87],
+                    data: [11.4, 13.32, 12.69, 19.39, 19.87, 12.27],
                     borderColor: '#009E6E', // Lighter Green
                     backgroundColor: '#009E6E',
                     tension: 0.3,
@@ -98,7 +100,7 @@
                 },
                 {
                     label: 'Retargeting - Tier 1',
-                    data: [10.91, 11.33, 13.34, 17.49, 17.36],
+                    data: [10.91, 11.33, 13.34, 17.49, 17.36, 14.1],
                     borderColor: '#2a7e68', // Mid Green
                     backgroundColor: '#2a7e68',
                     tension: 0.3,
@@ -108,7 +110,7 @@
                 },
                 {
                     label: 'Prospecting - Tier 1',
-                    data: [2.09, 3.11, 4.51, 6.16, 6.96],
+                    data: [2.09, 3.11, 4.51, 6.16, 6.96, 6.48],
                     borderColor: '#F58220', // CHHJ Primary Orange
                     backgroundColor: '#F58220',
                     tension: 0.3,
@@ -118,7 +120,7 @@
                 },
                 {
                     label: 'Prospecting - Tier 2',
-                    data: [2.14, 2.48, 3.25, 4.68, 6.32],
+                    data: [2.14, 2.48, 3.25, 4.68, 6.32, 5.67],
                     borderColor: '#F9B473', // Lighter Orange
                     backgroundColor: '#F9B473',
                     tension: 0.3,
@@ -128,7 +130,7 @@
                 },
                 {
                     label: 'Prospecting - Tier 3',
-                    data: [1.63, 1.9, 2.94, 4.04, 5.43],
+                    data: [1.63, 1.9, 2.94, 4.04, 5.43, 4.76],
                     borderColor: '#f79b4a', // Mid Orange
                     backgroundColor: '#f79b4a',
                     tension: 0.3,
@@ -182,6 +184,37 @@
                                 return label;
                             }
                         }
+                    },
+                    // --- ANNOTATION CONFIGURATION ---
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                // Position between 'July 6' (index 4) and 'July 20' (index 5)
+                                xMin: 4.5,
+                                xMax: 4.5,
+                                borderColor: 'rgba(107, 114, 128, 0.7)', // Gray-500
+                                borderWidth: 2,
+                                borderDash: [6, 6], // Creates a dotted/dashed line
+                                label: {
+                                    content: 'New CTV Creative Implemented',
+                                    enabled: true,
+                                    position: 'center', // Center label on the line
+                                    rotation: 0, // Set rotation to 0 for horizontal text
+                                    yAdjust: -150, // Adjust Y position to move it up
+                                    xAdjust: 50, // Adjust X position to move it right
+                                    backgroundColor: 'rgba(243, 244, 246, 0.85)', // Light gray background
+                                    font: {
+                                        family: 'Inter',
+                                        size: 11,
+                                        weight: '600' // Bolder font
+                                    },
+                                    color: '#1f2937', // Darker gray text color
+                                    padding: { x: 8, y: 6 },
+                                    cornerRadius: 6,
+                                }
+                            }
+                        }
                     }
                 },
                 scales: {
@@ -202,9 +235,8 @@
                         grid: {
                             color: '#e5e7eb' // Lighter grid lines
                         },
-                        ticks: {
-                           font: { size: 12, family: 'Inter' }
-                        }
+                         // Add padding to the top of the Y-axis to make space for the label
+                        max: 25 
                     }
                 }
             }
